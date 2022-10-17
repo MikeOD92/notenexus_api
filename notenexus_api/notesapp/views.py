@@ -12,7 +12,6 @@ from .serializers import CreateNodeSerializer, NodeSerializer ,NoteSerializer
 class CreateNodeView(generics.GenericAPIView, mixins.CreateModelMixin):
     queryset = Node.objects.all()
     serializer_class = CreateNodeSerializer
-    # permission_class = IsAuthorizedUSer
 
     def post(self, request):
         return Response({
@@ -24,11 +23,18 @@ class NodeView(generics.GenericAPIView, mixins.ListModelMixin, mixins.RetrieveMo
     serializer_class = NodeSerializer
 
     def get(self, request, pk=None):
+        user = request.user
+        data = self.queryset.filter(user=user).values()
+        # right now we dont include user data on the actual notes and just on the node model. 
+        
         if pk:
             return Response({
                 'data': self.retrieve(request,pk).data
             })
-        return self.list(request)
+
+        return Response({
+            'data': data
+        })
 
     def delete(self, request, pk=None):
         if pk:

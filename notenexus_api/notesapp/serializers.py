@@ -5,7 +5,7 @@ from .models import Node, Note
 class CreateNodeSerializer(serializers.ModelSerializer):
     class Meta: 
         model = Node
-        fields = ['subject_title']
+        fields = ['subject_title', 'user']
 
 class NoteSerializer(serializers.ModelSerializer):
     class Meta:
